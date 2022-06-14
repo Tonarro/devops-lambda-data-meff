@@ -1,13 +1,5 @@
 FROM public.ecr.aws/lambda/python:3.9
 
-RUN apt-get update && \
-    apt-get install -y locales && \
-    sed -i -e 's/# es_ES.UTF-8 UTF-8/es_ES.UTF-8 UTF-8/' /etc/locale.gen && \
-    dpkg-reconfigure --frontend=noninteractive locales
-
-ENV LANG es_ES.UTF-8
-ENV LC_ALL es_ES.UTF-8
-
 # Copy function code
 COPY app.py ${LAMBDA_TASK_ROOT}
 # Install the function's dependencies using file requirements.txt
