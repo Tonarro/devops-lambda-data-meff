@@ -19,7 +19,7 @@ def get_data():
             df_future = pd.read_html(str(future), decimal=',', thousands='.')[0]
             df_future.columns = df_future.columns.get_level_values(0)
             df_future = df_future.iloc[:-1, [0, -1]]
-            df_future.index = df_future.iloc[:, 0].values
+            df_future.index = [i.replace('.', '') for i in df_future.iloc[:, 0].values.tolist()]
             df_future = df_future.iloc[:, 1]
             df_future.index = pd.to_datetime(df_future.index, format='%d %b %Y')
             df_future.name = 'price'
