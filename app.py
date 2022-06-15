@@ -54,18 +54,20 @@ def implied_volatility(df_option, future_price):
 
 
 def handler(event, context):
-    print(event)
+    print('1', event)
     
     df_future, df_option = get_data()
-
+    print('2', df_future)
+    print('3', df_option)
     df_option['implied_volatility'] = df_option.apply(lambda row: implied_volatility(df_option=row, future_price=df_future.iloc[0]), axis=1)
+    print('4', df_option)
     df_option = df_option.reset_index(level=0)
     df_option = df_option.rename(columns={'index': 'expiration_date'})
     df_option.expiration_date = df_option.expiration_date.apply(lambda x: datetime.strftime(x, '%Y-%m-%d'))
     df_option.strike = df_option.strike.apply(lambda x: str(x))
     df_option.price = df_option.price.apply(lambda x: str(x))
     df_option.implied_volatility = df_option.implied_volatility.apply(lambda x: str(x))    
-
+    print('5', df_option)
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('MINI_IBEX_VOL')
 
@@ -74,5 +76,5 @@ def handler(event, context):
     response = table.put_item(
         Item=record
     )
-
+    print('6', response['ResponseMetadata']['HTTPStatusCode']) 
     return response['ResponseMetadata']['HTTPStatusCode']
