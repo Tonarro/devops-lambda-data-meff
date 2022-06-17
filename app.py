@@ -45,12 +45,16 @@ def implied_volatility(df_option, future_price):
     """
     Calculate implied volatility for a given future price, strike, expiry and price.
     """
-    if df_option.call_put == 'C':
-        c = mibian.BS([future_price, df_option.strike, 0, (df_option.name-datetime.today()).days], callPrice=df_option.price)
-        return c.impliedVolatility
-    elif df_option.call_put == 'P':
-        p = mibian.BS([future_price, df_option.strike, 0, (df_option.name-datetime.today()).days], putPrice=df_option.price)
-        return p.impliedVolatility
+    try:
+        if df_option.call_put == 'C':
+            c = mibian.BS([future_price, df_option.strike, 0, (df_option.name-datetime.today()).days], callPrice=df_option.price)
+            return c.impliedVolatility
+        elif df_option.call_put == 'P':
+            p = mibian.BS([future_price, df_option.strike, 0, (df_option.name-datetime.today()).days], putPrice=df_option.price)
+            return p.impliedVolatility
+    except:
+        print('Error implied_volatility', df_option.name, df_option.strike, df_option.price, future_price, df_option.call_put)
+        return None
 
 
 def handler(event, context):
