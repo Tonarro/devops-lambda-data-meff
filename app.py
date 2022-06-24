@@ -54,7 +54,7 @@ def implied_volatility(df_option, future_price):
             return p.impliedVolatility
     except:
         print('Error implied_volatility', df_option.name, df_option.strike, df_option.price, future_price, df_option.call_put)
-        return None
+        return 0
 
 
 def handler(event, context):
